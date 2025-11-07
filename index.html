@@ -1,145 +1,564 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>렌트잇</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header class="header">
-      <div class="logo-wrap">
-        <img src="images/logo.png" alt="렌트잇" class="logo" />
-      </div>
-      <nav class="gnb" aria-label="주요 메뉴">
-        <ul>
-          <li><a href="#home">HOME</a></li>
-          <li><a href="#initial-cost">초기비용</a></li>
-          <li><a href="#smart-car">똑똑한내차</a></li>
-          <li><a href="#event">이벤트</a></li>
-          <li><a href="#contact">문의하기</a></li>
-        </ul>
-      </nav>
-      <button class="menu-toggle" aria-label="메뉴 열기">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="side-nav" aria-hidden="true">
-        <button class="close-btn" aria-label="메뉴 닫기">×</button>
-        <ul>
-          <li><a href="#home">HOME</a></li>
-          <li><a href="#initial-cost">초기비용</a></li>
-          <li><a href="#smart-car">똑똑한내차</a></li>
-          <li><a href="#event">이벤트</a></li>
-          <li><a href="#contact">문의하기</a></li>
-        </ul>
-      </nav>
-      <div class="overlay" aria-hidden="true"></div>
-    </header>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 갤러리</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            background: #ffffff;
+            color: #0f172a;
+        }
+        main {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 32px 16px 96px;
+        }
+        h1 {
+            margin: 32px 0;
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-align: center;
+            color: #0f172a;
+        }
+        .image-section {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(241, 245, 249, 0.95));
+        }
+        .image-section img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 0;
+            filter: drop-shadow(0 24px 48px rgba(15, 23, 42, 0.16));
+        }
+        .image-section::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 96px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.92));
+            pointer-events: none;
+        }
+        .leads-section {
+            padding: 48px 0 96px;
+            background: #f8fafc;
+        }
+        .live-feed {
+            position: relative;
+            max-width: 720px;
+            margin: 0 auto;
+            border-radius: 28px;
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 28px 64px rgba(15, 23, 42, 0.12);
+            padding: 36px 40px;
+            overflow: hidden;
+        }
+        .live-feed__head {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+        .live-feed__title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.015em;
+        }
+        .live-feed__meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        .live-feed__meta::before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+        }
+        .live-feed__viewport {
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+        }
+        .live-feed__track {
+            display: flex;
+            flex-direction: column;
+            animation: live-scroll var(--scroll-duration, 90s) linear infinite;
+            will-change: transform;
+        }
+        .live-feed__viewport:hover .live-feed__track {
+            animation-play-state: paused;
+        }
+        .live-feed__list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .live-feed__item {
+            display: grid;
+            grid-template-columns: minmax(120px, 160px) minmax(150px, 1fr) minmax(140px, 1fr);
+            gap: 18px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            font-size: 1rem;
+            color: #1f2937;
+        }
+        .live-feed__item:last-child {
+            border-bottom: none;
+        }
+        .live-feed__label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        .live-feed__phone {
+            font-variant-numeric: tabular-nums;
+            color: #4b5563;
+        }
+        .live-feed__model {
+            color: #2563eb;
+            font-weight: 600;
+        }
+        .live-feed__mask {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 48px;
+            pointer-events: none;
+        }
+        .live-feed__mask--top {
+            top: 0;
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0));
+        }
+        .live-feed__mask--bottom {
+            bottom: 0;
+            background: linear-gradient(0deg, #ffffff 0%, rgba(255, 255, 255, 0));
+        }
+        .inquiry-section {
+            padding: 72px 0 120px;
+            background: #ffffff;
+        }
+        .inquiry-card {
+            max-width: 720px;
+            margin: 0 auto;
+            border-radius: 28px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+            padding: 40px 44px;
+        }
+        .inquiry-card__header {
+            margin-bottom: 28px;
+        }
+        .inquiry-card__title {
+            margin: 0 0 12px;
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .inquiry-card__subtitle {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        .inquiry-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-field label {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            padding: 14px 16px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            border-radius: 14px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: #0f172a;
+            background: #f8fafc;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+            background: #ffffff;
+        }
+        .form-field textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-consent {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            background: #f8fafc;
+            color: #475569;
+        }
+        .form-consent input[type="checkbox"] {
+            margin-top: 4px;
+            width: 20px;
+            height: 20px;
+            accent-color: #2563eb;
+        }
+        .form-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .submit-button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .submit-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 32px rgba(37, 99, 235, 0.25);
+        }
+        .submit-button:active {
+            transform: translateY(0);
+        }
+        .form-hint {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+        }
+        .back-to-top {
+            position: fixed;
+            right: 32px;
+            bottom: 32px;
+            z-index: 100;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 16px 32px rgba(37, 99, 235, 0.28);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+        }
+        .back-to-top.is-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top:active {
+            transform: translateY(1px);
+        }
+        footer {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 48px 16px 56px;
+        }
+        .footer-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .footer-brand {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+        }
+        .footer-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 24px;
+            color: #cbd5f5;
+            font-size: 0.95rem;
+        }
+        .footer-meta span {
+            opacity: 0.85;
+        }
+        .footer-copy {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        @keyframes live-scroll {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+        @media (max-width: 720px) {
+            main {
+                padding: 24px 12px 72px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .live-feed {
+                padding: 28px 24px;
+                border-radius: 24px;
+            }
+            .live-feed__title {
+                font-size: 1.5rem;
+            }
+            .live-feed__viewport {
+                height: 280px;
+            }
+            .live-feed__item {
+                grid-template-columns: 1fr;
+                gap: 6px;
+                align-items: flex-start;
+            }
+            .inquiry-card {
+                padding: 32px 24px;
+                border-radius: 24px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .footer-inner {
+                gap: 12px;
+            }
+            .back-to-top {
+                right: 16px;
+                bottom: 20px;
+                width: 46px;
+                height: 46px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
     <main>
-      <section id="home" class="visual">
-        <h1 class="sr-only">HOME</h1>
-        <picture>
-          <source media="(min-width: 769px)" srcset="images/pc/h-1.png" />
-          <img src="images/mobile/h-1-m.png" alt="HOME" />
-        </picture>
-      </section>
-
-      <section id="initial-cost" class="visual">
-        <h2 class="sr-only">초기비용</h2>
-        <picture>
-          <source media="(min-width: 769px)" srcset="images/pc/h-2.png" />
-          <img src="images/mobile/h-2-m.png" alt="초기비용" />
-        </picture>
-      </section>
-
-      <section id="smart-car" class="visual">
-        <h2 class="sr-only">똑똑한내차</h2>
-        <picture>
-          <source media="(min-width: 769px)" srcset="images/pc/h-3.png" />
-          <img src="images/mobile/h-3-m.png" alt="똑똑한내차" />
-        </picture>
-      </section>
-
-      <section id="event" class="visual">
-        <h2 class="sr-only">이벤트</h2>
-        <picture>
-          <source media="(min-width: 769px)" srcset="images/pc/h-4.png" />
-          <img src="images/mobile/h-4-m.png" alt="이벤트" />
-        </picture>
-      </section>
-
-      <section id="contact" class="contact">
-        <div class="contact-card">
-          <h2>문의하기</h2>
-          <p class="highlight">내 차, 렌트로 더 똑똑하게 시작하세요</p>
-          <form class="form">
-            <label for="name">이름</label>
-            <input type="text" id="name" name="name" placeholder="홍길동" />
-
-            <label for="phone">연락처</label>
-            <input type="tel" id="phone" name="phone" placeholder="010-0000-0000" />
-
-            <label for="car">희망 차종</label>
-            <input type="text" id="car" name="car" placeholder="예: 아반떼" />
-
-            <label class="agreement">
-              <input type="checkbox" name="privacy" /> 개인정보 수집 및 이용에 동의합니다.
-            </label>
-
-            <button type="submit">지금 무료 견적 받기 🚗</button>
-          </form>
-        </div>
-      </section>
+        
+        <section class="image-section">
+            <img src="images/h-1.png" alt="이미지 1">
+        </section>
+        <section class="image-section">
+            <img src="images/h-2.png" alt="이미지 2">
+        </section>
+        <section class="image-section">
+            <img src="images/h-3.png" alt="이미지 3">
+        </section>
+        <section class="image-section">
+            <img src="images/h-4.png" alt="이미지 4">
+        </section>
+        <section class="image-section">
+            <img src="images/h-5.png" alt="이미지 5">
+        </section>
+        <section class="image-section">
+            <img src="images/h-6.png" alt="이미지 6">
+        </section>
+        <section class="image-section">
+            <img src="images/h-7.png" alt="이미지 7">
+        </section>
+        <section class="image-section">
+            <img src="images/h-8.png" alt="이미지 8">
+        </section>
+        <section class="image-section leads-section">
+            <div class="live-feed">
+                <div class="live-feed__head">
+                    <h2 class="live-feed__title">실시간 상담 문의</h2>
+                </div>
+                <div class="live-feed__viewport">
+                    <div class="live-feed__track">
+                        <ul class="live-feed__list">
+                            <li class="live-feed__item"><span class="live-feed__label">남x우</span><span class="live-feed__phone">010-2xxx-3xx3</span><span class="live-feed__model">쏘x토</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">김x은</span><span class="live-feed__phone">010-5x7x-9x1x</span><span class="live-feed__model">그랜xxx발</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">박x진</span><span class="live-feed__phone">010-3x2x-5x7x</span><span class="live-feed__model">EV6 GTx</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">이x호</span><span class="live-feed__phone">010-8xxx-1x2x</span><span class="live-feed__model">펠리xx드</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">최x연</span><span class="live-feed__phone">010-6xx7-4xx8</span><span class="live-feed__model">제x시스</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">정x후</span><span class="live-feed__phone">010-7x8x-2x5x</span><span class="live-feed__model">카x닉</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">신x아</span><span class="live-feed__phone">010-9xxx-6x1x</span><span class="live-feed__model">스포x지</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">문x혁</span><span class="live-feed__phone">010-4x1x-8x9x</span><span class="live-feed__model">GV7x</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">장x우</span><span class="live-feed__phone">010-2x4x-7x0x</span><span class="live-feed__model">모x닝</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">임x리</span><span class="live-feed__phone">010-1x6x-4x8x</span><span class="live-feed__model">벤x EQA</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">서x준</span><span class="live-feed__phone">010-3xx5-9xx6</span><span class="live-feed__model">니로 Pxx</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">오x나</span><span class="live-feed__phone">010-5x2x-1x4x</span><span class="live-feed__model">XM3 E-xx</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">유x성</span><span class="live-feed__phone">010-7x3x-2x9x</span><span class="live-feed__model">캐딜x XT5</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">배x경</span><span class="live-feed__phone">010-9x4x-3x7x</span><span class="live-feed__model">투x싼</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">손x리</span><span class="live-feed__phone">010-8x5x-6x0x</span><span class="live-feed__model">카니x 하이</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">권x호</span><span class="live-feed__phone">010-6x6x-5x3x</span><span class="live-feed__model">티x론</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">하x진</span><span class="live-feed__phone">010-4x7x-9x2x</span><span class="live-feed__model">렉x NX</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">노x하</span><span class="live-feed__phone">010-1x8x-2x1x</span><span class="live-feed__model">아이오xx6</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">길x민</span><span class="live-feed__phone">010-2x9x-8x6x</span><span class="live-feed__model">벤테x가</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">위x슬</span><span class="live-feed__phone">010-3x0x-7x8x</span><span class="live-feed__model">코나 일렉</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">류x혁</span><span class="live-feed__phone">010-6x1x-3x5x</span><span class="live-feed__model">포르x 카이</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">도x슬</span><span class="live-feed__phone">010-8x2x-1x9x</span><span class="live-feed__model">GV8x 쿠페</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">명x준</span><span class="live-feed__phone">010-5x3x-4x4x</span><span class="live-feed__model">세x토</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">윤x라</span><span class="live-feed__phone">010-7x4x-6x3x</span><span class="live-feed__model">에x원</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">안x빈</span><span class="live-feed__phone">010-9x5x-7x1x</span><span class="live-feed__model">K9 시그x</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">라x흔</span><span class="live-feed__phone">010-1x6x-8x5x</span><span class="live-feed__model">SM6 프x임</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">백x준</span><span class="live-feed__phone">010-2x7x-5x4x</span><span class="live-feed__model">GV7x</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">표x연</span><span class="live-feed__phone">010-3x8x-2x3x</span><span class="live-feed__model">모하x</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">천x호</span><span class="live-feed__phone">010-4x9x-1x2x</span><span class="live-feed__model">패x사트</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">허x나</span><span class="live-feed__phone">010-5x0x-9x8x</span><span class="live-feed__model">스팅x</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">설x현</span><span class="live-feed__phone">010-6x1x-7x0x</span><span class="live-feed__model">아x디 Q5</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">길x담</span><span class="live-feed__phone">010-7x2x-4x6x</span><span class="live-feed__model">니산x라</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">표x윤</span><span class="live-feed__phone">010-8x3x-3x5x</span><span class="live-feed__model">아이오xx5</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">임x주</span><span class="live-feed__phone">010-9x4x-2x1x</span><span class="live-feed__model">그랜xxx발</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">홍x리</span><span class="live-feed__phone">010-2x5x-6x2x</span><span class="live-feed__model">쏘x토</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">마x도</span><span class="live-feed__phone">010-3x6x-7x4x</span><span class="live-feed__model">제x시스 쿠페</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">심x은</span><span class="live-feed__phone">010-4x7x-8x5x</span><span class="live-feed__model">투x싼 하이</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">곽x재</span><span class="live-feed__phone">010-5x8x-9x6x</span><span class="live-feed__model">스포x지 하이</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">염x수</span><span class="live-feed__phone">010-6x9x-0x7x</span><span class="live-feed__model">GV7x 블랙</span></li>
+                            <li class="live-feed__item"><span class="live-feed__label">탁x후</span><span class="live-feed__phone">010-7x0x-1x8x</span><span class="live-feed__model">EV6 에어</span></li>
+                        </ul>
+                    </div>
+                    <div class="live-feed__mask live-feed__mask--top"></div>
+                    <div class="live-feed__mask live-feed__mask--bottom"></div>
+                </div>
+            </div>
+        </section>
+        <section class="inquiry-section">
+            <div class="inquiry-card">
+                <div class="inquiry-card__header">
+                    <h2 class="inquiry-card__title">맞춤 상담 요청하기</h2>
+                    <p class="inquiry-card__subtitle">연락처와 원하시는 차량 정보를 남겨주시면 전문 매니저가 빠르게 연락드립니다.</p>
+                </div>
+                <form class="inquiry-form" action="#" method="post">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="customer-name">이름</label>
+                            <input id="customer-name" name="customer-name" type="text" placeholder="예) 남x우" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="customer-phone">연락처</label>
+                            <input id="customer-phone" name="customer-phone" type="tel" inputmode="tel" placeholder="예) 010-2xxx-3xx3" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="preferred-model">문의 차량</label>
+                            <input id="preferred-model" name="preferred-model" type="text" placeholder="예) 쏘x토, 그랜xxx발" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="contact-method">원하시는 상담 방식</label>
+                            <select id="contact-method" name="contact-method" required>
+                                <option value="" disabled selected>선택해 주세요</option>
+                                <option value="phone">전화 상담</option>
+                                <option value="kakao">카카오톡 상담</option>
+                                <option value="visit">방문 상담</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="customer-message">문의사항 (선택)</label>
+                        <textarea id="customer-message" name="customer-message" placeholder="추가로 남기실 내용을 입력해 주세요."></textarea>
+                    </div>
+                    <label class="form-consent">
+                        <input type="checkbox" name="privacy-consent" required>
+                        <span>개인정보 수집·이용에 동의합니다. 제공하신 정보는 상담 목적 외에 사용되지 않습니다.</span>
+                    </label>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-button">상담 신청하기</button>
+                        <p class="form-hint">평일 09:00~18:00 접수 건은 당일 중으로 연락드립니다.</p>
+                    </div>
+                </form>
+            </div>
+        </section>
     </main>
-
-    <a
-      class="kakao-floating kakao-floating--desktop"
-      href="https://pf.kakao.com/_rentit"
-      target="_blank"
-      rel="noopener"
-      aria-label="카카오톡 실시간 상담"
-    >
-      <span class="kakao-floating__icon">💬</span>
-      <span class="kakao-floating__text">카카오톡으로 실시간 상담하기</span>
-    </a>
-
-    <a
-      class="kakao-floating kakao-floating--mobile"
-      href="https://pf.kakao.com/_rentit"
-      target="_blank"
-      rel="noopener"
-      aria-label="모바일 카카오톡 실시간 상담"
-    >
-      <span class="kakao-floating__icon">💬</span>
-      <span class="kakao-floating__text">카톡 상담</span>
-    </a>
-
-    <div class="floating-actions" aria-label="빠른 실행 메뉴">
-      <a class="fab fab--phone" href="tel:01000000000" aria-label="전화 상담">
-        <span>📞</span>
-      </a>
-      <a
-        class="fab fab--kakao"
-        href="https://pf.kakao.com/_rentit"
-        target="_blank"
-        rel="noopener"
-        aria-label="카카오톡 상담"
-      >
-        <span>💬</span>
-      </a>
-      <button class="fab fab--top" type="button" aria-label="맨 위로 이동">
-        <span>↑</span>
-      </button>
-    </div>
-
-    <footer class="footer">
-      <small>© 렌트잇. All rights reserved.</small>
+    <button type="button" class="back-to-top" aria-label="맨 위로 이동">TOP</button>
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">렌트잇</div>
+            <div class="footer-meta">
+                <span>상호: 렌트잇</span>
+                <span>대표번호: 1522-0000</span>
+                <span>주소: 인천광역시 서구 봉오재3로 66, 105동 901호 (가정동, 루원시티프라디움)</span>
+                <span>등록번호: 192-18-02321</span>
+            </div>
+            <div class="footer-copy">© 2025 렌트잇. All rights reserved.</div>
+        </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var track = document.querySelector('.live-feed__track');
+            if (track) {
+                var list = track.querySelector('.live-feed__list');
+                if (list) {
+                    var clone = list.cloneNode(true);
+                    clone.setAttribute('aria-hidden', 'true');
+                    track.appendChild(clone);
 
-    <script src="script.js"></script>
-  </body>
+                    var items = list.querySelectorAll('.live-feed__item').length;
+                    var duration = Math.max(70, items * 2.2);
+                    track.style.setProperty('--scroll-duration', duration + 's');
+                }
+            }
+
+            var backToTop = document.querySelector('.back-to-top');
+            if (backToTop) {
+                var toggleButton = function () {
+                    if (window.scrollY > 240) {
+                        backToTop.classList.add('is-visible');
+                    } else {
+                        backToTop.classList.remove('is-visible');
+                    }
+                };
+
+                toggleButton();
+                window.addEventListener('scroll', toggleButton, { passive: true });
+                backToTop.addEventListener('click', function () {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+</body>
 </html>
 
