@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>렌트잇</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo-wrap">
+        <img src="images/logo.png" alt="렌트잇" class="logo" />
+      </div>
+      <nav class="gnb" aria-label="주요 메뉴">
+        <ul>
+          <li><a href="#home">HOME</a></li>
+          <li><a href="#initial-cost">초기비용</a></li>
+          <li><a href="#smart-car">똑똑한내차</a></li>
+          <li><a href="#event">이벤트</a></li>
+          <li><a href="#contact">문의하기</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" aria-label="메뉴 열기">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="side-nav" aria-hidden="true">
+        <button class="close-btn" aria-label="메뉴 닫기">×</button>
+        <ul>
+          <li><a href="#home">HOME</a></li>
+          <li><a href="#initial-cost">초기비용</a></li>
+          <li><a href="#smart-car">똑똑한내차</a></li>
+          <li><a href="#event">이벤트</a></li>
+          <li><a href="#contact">문의하기</a></li>
+        </ul>
+      </nav>
+      <div class="overlay" aria-hidden="true"></div>
+    </header>
+
+    <main>
+      <section id="home" class="visual">
+        <h1 class="sr-only">HOME</h1>
+        <picture>
+          <source media="(min-width: 769px)" srcset="images/pc/h-1.png" />
+          <img src="images/mobile/h-1-m.png" alt="HOME" />
+        </picture>
+      </section>
+
+      <section id="initial-cost" class="visual">
+        <h2 class="sr-only">초기비용</h2>
+        <picture>
+          <source media="(min-width: 769px)" srcset="images/pc/h-2.png" />
+          <img src="images/mobile/h-2-m.png" alt="초기비용" />
+        </picture>
+      </section>
+
+      <section id="smart-car" class="visual">
+        <h2 class="sr-only">똑똑한내차</h2>
+        <picture>
+          <source media="(min-width: 769px)" srcset="images/pc/h-3.png" />
+          <img src="images/mobile/h-3-m.png" alt="똑똑한내차" />
+        </picture>
+      </section>
+
+      <section id="event" class="visual">
+        <h2 class="sr-only">이벤트</h2>
+        <picture>
+          <source media="(min-width: 769px)" srcset="images/pc/h-4.png" />
+          <img src="images/mobile/h-4-m.png" alt="이벤트" />
+        </picture>
+      </section>
+
+      <section id="contact" class="contact">
+        <div class="contact-card">
+          <h2>문의하기</h2>
+          <p class="highlight">내 차, 렌트로 더 똑똑하게 시작하세요</p>
+          <form class="form">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" placeholder="홍길동" />
+
+            <label for="phone">연락처</label>
+            <input type="tel" id="phone" name="phone" placeholder="010-0000-0000" />
+
+            <label for="car">희망 차종</label>
+            <input type="text" id="car" name="car" placeholder="예: 아반떼" />
+
+            <label class="agreement">
+              <input type="checkbox" name="privacy" /> 개인정보 수집 및 이용에 동의합니다.
+            </label>
+
+            <button type="submit">지금 무료 견적 받기 🚗</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <a
+      class="kakao-floating kakao-floating--desktop"
+      href="https://pf.kakao.com/_rentit"
+      target="_blank"
+      rel="noopener"
+      aria-label="카카오톡 실시간 상담"
+    >
+      <span class="kakao-floating__icon">💬</span>
+      <span class="kakao-floating__text">카카오톡으로 실시간 상담하기</span>
+    </a>
+
+    <a
+      class="kakao-floating kakao-floating--mobile"
+      href="https://pf.kakao.com/_rentit"
+      target="_blank"
+      rel="noopener"
+      aria-label="모바일 카카오톡 실시간 상담"
+    >
+      <span class="kakao-floating__icon">💬</span>
+      <span class="kakao-floating__text">카톡 상담</span>
+    </a>
+
+    <div class="floating-actions" aria-label="빠른 실행 메뉴">
+      <a class="fab fab--phone" href="tel:01000000000" aria-label="전화 상담">
+        <span>📞</span>
+      </a>
+      <a
+        class="fab fab--kakao"
+        href="https://pf.kakao.com/_rentit"
+        target="_blank"
+        rel="noopener"
+        aria-label="카카오톡 상담"
+      >
+        <span>💬</span>
+      </a>
+      <button class="fab fab--top" type="button" aria-label="맨 위로 이동">
+        <span>↑</span>
+      </button>
+    </div>
+
+    <footer class="footer">
+      <small>© 렌트잇. All rights reserved.</small>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
