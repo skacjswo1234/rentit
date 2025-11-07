@@ -459,8 +459,14 @@ main {
 @media (max-width: 768px) {
   .visual {
     aspect-ratio: auto;
-    height: min(75vh, 620px);
+    height: auto;
     margin: 0;
+  }
+
+  .visual img {
+    height: auto;
+    object-fit: contain;
+    background: var(--white);
   }
 
   .floating-actions {
