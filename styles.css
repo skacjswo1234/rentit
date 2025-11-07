@@ -448,6 +448,15 @@ main {
     margin: 0 auto;
   }
 
+  main {
+    padding-bottom: 96px;
+    gap: 18px;
+  }
+
+  .visual:first-of-type {
+    margin-top: 18px;
+  }
+
   .kakao-floating--desktop {
     display: none;
   }
