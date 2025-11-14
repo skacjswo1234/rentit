@@ -437,6 +437,7 @@
             .form-field textarea {
                 width: 100%;
                 max-width: 100%;
+                font-size: 16px; /* iOS 줌 방지 */
             }
             .form-consent {
                 padding: 14px;
@@ -452,14 +453,6 @@
                 font-size: 0.85rem;
                 line-height: 1.6;
             }
-            .inquiry-card {
-                padding: 24px 20px;
-            }
-            .form-field input,
-            .form-field select,
-            .form-field textarea {
-                font-size: 16px; /* iOS 줌 방지 */
-            }
             .footer-inner {
                 gap: 12px;
             }
@@ -469,6 +462,67 @@
                 width: 46px;
                 height: 46px;
                 font-size: 1.2rem;
+            }
+        }
+        /* 갤럭시 S24 및 작은 화면 최적화 */
+        @media (max-width: 412px) {
+            main {
+                padding: 20px 6px 64px;
+            }
+            .inquiry-card {
+                padding: 20px 12px;
+                margin: 0 8px;
+                max-width: calc(100% - 16px);
+            }
+            .form-field input,
+            .form-field select,
+            .form-field textarea {
+                padding: 12px 14px;
+                font-size: 16px;
+            }
+            .form-consent {
+                padding: 12px;
+                gap: 8px;
+            }
+            .form-consent span {
+                font-size: 0.8rem;
+            }
+        }
+        /* 갤럭시 S24 (360px) 및 매우 작은 화면 */
+        @media (max-width: 360px) {
+            main {
+                padding: 16px 4px 56px;
+            }
+            .inquiry-card {
+                padding: 18px 10px;
+                margin: 0 4px;
+                max-width: calc(100% - 8px);
+            }
+            .inquiry-card__title {
+                font-size: 1.5rem;
+            }
+            .inquiry-card__subtitle {
+                font-size: 0.85rem;
+            }
+            .form-field label {
+                font-size: 0.9rem;
+            }
+            .form-field input,
+            .form-field select,
+            .form-field textarea {
+                padding: 10px 12px;
+                font-size: 16px;
+            }
+            .form-consent {
+                padding: 10px;
+            }
+            .form-consent span {
+                font-size: 0.75rem;
+                line-height: 1.7;
+            }
+            .submit-button {
+                padding: 14px;
+                font-size: 1rem;
             }
         }
     </style>
