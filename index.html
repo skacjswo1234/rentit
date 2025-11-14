@@ -271,6 +271,28 @@
             color: #64748b;
             text-align: center;
         }
+        .form-message {
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            text-align: center;
+            margin-top: 12px;
+        }
+        .form-message.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+        .form-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
         .back-to-top {
             position: fixed;
             right: 32px;
@@ -381,6 +403,23 @@
             }
         }
     </style>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1374384927432020');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1374384927432020&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
 <body>
     <main>
@@ -470,7 +509,7 @@
                     <h2 class="inquiry-card__title">맞춤 상담 요청하기</h2>
                     <p class="inquiry-card__subtitle">연락처와 원하시는 차량 정보를 남겨주시면 전문 매니저가 빠르게 연락드립니다.</p>
                 </div>
-                <form class="inquiry-form" action="#" method="post">
+                <form class="inquiry-form" id="inquiryForm">
                     <div class="form-row">
                         <div class="form-field">
                             <label for="customer-name">이름</label>
@@ -505,8 +544,9 @@
                         <span>개인정보 수집·이용에 동의합니다. 제공하신 정보는 상담 목적 외에 사용되지 않습니다.</span>
                     </label>
                     <div class="form-actions">
-                        <button type="submit" class="submit-button">상담 신청하기</button>
+                        <button type="submit" class="submit-button" id="submitButton">상담 신청하기</button>
                         <p class="form-hint">평일 09:00~18:00 접수 건은 당일 중으로 연락드립니다.</p>
+                        <div id="formMessage" class="form-message" style="display: none;"></div>
                     </div>
                 </form>
             </div>
@@ -556,6 +596,80 @@
                 backToTop.addEventListener('click', function () {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
+            }
+
+            // 구글 시트 연동 - 문의폼 제출 처리
+            var inquiryForm = document.getElementById('inquiryForm');
+            var submitButton = document.getElementById('submitButton');
+            var formMessage = document.getElementById('formMessage');
+            
+            // 구글 시트 연동 Web App URL
+            var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZ34r31-7QrLqM0SHumT055D4OEvJHXA193d0jRGv00UbHyYM1ugvREurTPZAqON1W2A/exec';
+            
+            if (inquiryForm) {
+                inquiryForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // 메시지 숨기기
+                    formMessage.style.display = 'none';
+                    
+                    // 버튼 비활성화
+                    submitButton.disabled = true;
+                    submitButton.textContent = '전송 중...';
+                    
+                    // 폼 데이터 수집
+                    var formData = {
+                        'customer-name': document.getElementById('customer-name').value,
+                        'customer-phone': document.getElementById('customer-phone').value,
+                        'preferred-model': document.getElementById('preferred-model').value,
+                        'contact-method': document.getElementById('contact-method').value,
+                        'customer-message': document.getElementById('customer-message').value,
+                        'privacy-consent': document.querySelector('input[name="privacy-consent"]').checked
+                    };
+                    
+                    // 구글 시트로 데이터 전송
+                    fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(function() {
+                        // no-cors 모드에서는 응답을 받을 수 없으므로 항상 성공으로 처리
+                        showMessage('문의가 성공적으로 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.', 'success');
+                        inquiryForm.reset();
+                        
+                        // Meta Pixel - 문의폼 제출 이벤트 트리거
+                        if (typeof fbq !== 'undefined') {
+                            fbq('track', 'Lead', {
+                                content_name: formData['preferred-model'] || '문의하기',
+                                content_category: '상담 문의'
+                            });
+                        }
+                    })
+                    .catch(function(error) {
+                        showMessage('오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error');
+                        console.error('Error:', error);
+                    })
+                    .finally(function() {
+                        // 버튼 다시 활성화
+                        submitButton.disabled = false;
+                        submitButton.textContent = '상담 신청하기';
+                    });
+                });
+            }
+            
+            function showMessage(message, type) {
+                formMessage.textContent = message;
+                formMessage.className = 'form-message ' + type;
+                formMessage.style.display = 'block';
+                
+                // 5초 후 메시지 자동 숨김
+                setTimeout(function() {
+                    formMessage.style.display = 'none';
+                }, 5000);
             }
         });
     </script>
