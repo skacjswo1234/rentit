@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>이미지 갤러리</title>
     <style>
         * {
@@ -237,7 +237,16 @@
             margin-top: 4px;
             width: 20px;
             height: 20px;
+            min-width: 20px;
+            flex-shrink: 0;
             accent-color: #2563eb;
+        }
+        .form-consent span {
+            flex: 1;
+            word-break: keep-all;
+            word-wrap: break-word;
+            line-height: 1.5;
+            font-size: 0.9rem;
         }
         .form-actions {
             display: flex;
@@ -390,6 +399,28 @@
             }
             .form-row {
                 grid-template-columns: 1fr;
+            }
+            .form-consent {
+                padding: 14px;
+                gap: 10px;
+            }
+            .form-consent input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                min-width: 18px;
+                margin-top: 2px;
+            }
+            .form-consent span {
+                font-size: 0.85rem;
+                line-height: 1.6;
+            }
+            .inquiry-card {
+                padding: 24px 20px;
+            }
+            .form-field input,
+            .form-field select,
+            .form-field textarea {
+                font-size: 16px; /* iOS 줌 방지 */
             }
             .footer-inner {
                 gap: 12px;
@@ -559,7 +590,7 @@
             <div class="footer-meta">
                 <span>상호: 렌트잇</span>
                 <span>대표번호: 1522-0000</span>
-                <span>주소: 인천광역시 서구 봉오재3로 66, 105동 901호 (가정동, 루원시티프라디움)</span>
+                <span>주소: 인천광역시 부평구 길주로 647번길4, 501호</span>
                 <span>등록번호: 192-18-02321</span>
             </div>
             <div class="footer-copy">© 2025 렌트잇. All rights reserved.</div>
